@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
-
 func main() {
-	fmt.Println("bleep bleep")
+	sequence := createSequence(8, 1)
+	for {
+		sequence.proceed()
+	}
 }
