@@ -1,12 +1,20 @@
 package main
 
+import (
+	"math/rand"
+	"time"
+)
+
 func play() {
-	sequence := createSequence(8, 1)
+	stepTime := rand.Intn(5)
+	sequence := createSequence(8, float64(stepTime))
 	for {
 		sequence.proceed()
 	}
 }
 
 func main() {
-	play()
+	go play()
+	go play()
+	time.Sleep(100 * time.Second)
 }
