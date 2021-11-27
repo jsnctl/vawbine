@@ -19,8 +19,8 @@ type Generator struct {
 func (generator *Generator) generate() {
 
 	durations := make([]float64, 100)
-	minDuration := 0.001
-	maxDuration := 0.5
+	minDuration := 1.0E-2
+	maxDuration := 1.0E-1
 	for i := range durations {
 		durations[i] = minDuration + rand.Float64() * (maxDuration - minDuration)
 	}
@@ -34,7 +34,7 @@ func (generator *Generator) generate() {
 
 		var angle = tau / float64(nSamples)
 
-		frequency := float64(1000.0 * seed)
+		frequency := 1000.0 * seed
 
 		for i := 0; i <= nSamples; i++ {
 			sample := 5.0 * math.Sin(angle * frequency * float64(i))
