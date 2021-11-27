@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/binary"
-	"fmt"
 	"github.com/jsnctl/gotechre/waveforms"
 	"math"
 	"math/rand"
@@ -47,7 +46,6 @@ func (generator *Generator) generate() {
 
 		for i := 0; i <= nSamples; i++ {
 			sample := 5.0 * math.Sin(angle * frequency * float64(i))
-			fmt.Printf("%v \n", sample)
 			var buf [8]byte
 			binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(sample)))
 			f.Write(buf[:])
