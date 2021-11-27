@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 )
 
@@ -19,7 +20,7 @@ func createSequence(numberOfSteps int, stepTime float64) Sequence {
 	}
 	sequence.Stack = make([]int, numberOfSteps)
 	for i, _ := range sequence.Stack  {
-		sequence.Stack[i] = i + 10
+		sequence.Stack[i] = i + rand.Intn(15)
 	}
 	sequence.Cursor = 0
 	return sequence
