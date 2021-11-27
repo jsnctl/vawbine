@@ -12,7 +12,11 @@ const (
 	SampleRate = 44100
 )
 
-func generate() {
+type Generator struct {
+	Sequence Sequence
+}
+
+func (generator *Generator) generate() {
 
 	durations := make([]float64, 100)
 	minDuration := 0.001
@@ -21,21 +25,16 @@ func generate() {
 		durations[i] = minDuration + rand.Float64() * (maxDuration - minDuration)
 	}
 
-	frequencies := make([]float64, 100)
-	min := 1000.0
-	max := 3000.0
-	for i := range frequencies {
-		frequencies[i] = min + rand.Float64() * (max - min)
-	}
-
 	output := "sound.bin"
 	f, _ := os.Create(output)
 
-	for j, frequency := range frequencies {
+	for j, seed := range generator.Sequence.Stack {
 		nSamples := int(durations[j] * SampleRate)
 		tau := math.Pi * 2
 
 		var angle = tau / float64(nSamples)
+
+		frequency := float64(1000.0 * seed)
 
 		for i := 0; i <= nSamples; i++ {
 			sample := 5.0 * math.Sin(angle * frequency * float64(i))
