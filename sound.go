@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"github.com/jsnctl/gotechre/waveforms"
 	"math"
 	"math/rand"
 	"os"
@@ -14,10 +15,18 @@ const (
 
 type Generator struct {
 	Sequence Sequence
+	Waveform waveforms.Waveform
+}
+
+func newGenerator(sequence Sequence, waveform waveforms.Waveform) Generator {
+	generator := Generator{
+		Sequence: sequence,
+		Waveform: waveform,
+	}
+	return generator
 }
 
 func (generator *Generator) generate() {
-
 	durations := make([]float64, 100)
 	minDuration := 1.0E-2
 	maxDuration := 5.0E-2

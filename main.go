@@ -1,6 +1,6 @@
 package main
 
 func main() {
-	generator := Generator{Sequence: createSequence(5000)}
+	generator := newGenerator(createSequence(1000), "sine")
 	generator.generate()
 }
