@@ -2,7 +2,6 @@ package main
 
 import (
 	"math/rand"
-	"time"
 )
 
 func play() {
@@ -14,7 +13,10 @@ func play() {
 }
 
 func main() {
-	go play()
-	go play()
-	time.Sleep(100 * time.Second)
+	//go play()
+	//go play()
+	//time.Sleep(100 * time.Second)
+
+	generate()
+
 }
