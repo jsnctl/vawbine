@@ -2,14 +2,11 @@ package main
 
 import (
 	"encoding/binary"
+	"github.com/jsnctl/gotechre/shared"
 	"github.com/jsnctl/gotechre/waveforms"
 	"math"
 	"math/rand"
 	"os"
-)
-
-const (
-	SampleRate = 44100
 )
 
 type Generator struct {
@@ -33,11 +30,10 @@ func (generator *Generator) generate() {
 		durations[i] = minDuration + rand.Float64() * (maxDuration - minDuration)
 	}
 
-	output := "sound.bin"
-	f, _ := os.Create(output)
+	f, _ := os.Create(shared.OutputFile)
 
 	for j, seed := range generator.Sequence.Stack {
-		nSamples := int(durations[j] * SampleRate)
+		nSamples := int(durations[j] * shared.SampleRate)
 		tau := math.Pi * 2
 
 		var angle = tau / float64(nSamples)
