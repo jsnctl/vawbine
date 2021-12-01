@@ -5,7 +5,6 @@ import (
 	"github.com/jsnctl/gotechre/shared"
 	"github.com/jsnctl/gotechre/waveforms"
 	"math"
-	"math/rand"
 	"os"
 )
 
@@ -22,31 +21,29 @@ func newGenerator(sequence Sequence, waveform waveforms.Waveform) Generator {
 	return generator
 }
 
+var f *os.File
+
 func (generator *Generator) generate() {
-	durations := make([]float64, 100)
-	minDuration := 1.0E-2
-	maxDuration := 5.0E-2
-	for i := range durations {
-		durations[i] = minDuration + rand.Float64() * (maxDuration - minDuration)
+	f, _ = os.Create(shared.OutputFile)
+	for _, seed := range generator.Sequence.Stack {
+		note(10.0 * seed, 0.05)
 	}
+}
 
-	f, _ := os.Create(shared.OutputFile)
+func note(seed float64, duration float64) {
+	nSamples := int(duration * shared.SampleRate)
+	tau := math.Pi * 2
 
-	for j, seed := range generator.Sequence.Stack {
-		nSamples := int(durations[j] * shared.SampleRate)
-		tau := math.Pi * 2
+	var angle = tau / float64(nSamples)
 
-		var angle = tau / float64(nSamples)
-
-		frequency := 5.0 * seed
-
-		for i := 0; i <= nSamples; i++ {
-			sample := 5.0 * math.Sin(angle * frequency * float64(i))
-			var buf [8]byte
-			binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(sample)))
-			f.Write(buf[:])
-		}
+	for i := 0; i <= nSamples; i++ {
+		sample := 5.0 * math.Sin(angle * seed * float64(i))
+		var buf [8]byte
+		binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(sample)))
+		write(buf)
 	}
+}
 
-
+func write(buf [8]byte) {
+	f.Write(buf[:])
 }
