@@ -24,7 +24,7 @@ var f *os.File
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
 	for _, seed := range generator.Sequence.Stack {
-		note(10.0*seed, 0.05)
+		note(5.0*seed, 0.04)
 	}
 }
 
