@@ -1,29 +1,15 @@
 package waveforms
 
-import "math"
-
-type Waveform string
-
-const (
-	Sine Waveform = "sine"
-	Square = "square"
-	Sawtooth = "sawtooth"
+import (
+	"math"
 )
 
-func (waveform Waveform) isValid() bool {
-	switch waveform {
-	case Sine, Square, Sawtooth:
-		return true
-	}
-	return false
+func Sine(angle float64, frequency float64) float64 {
+	return math.Sin(angle * frequency)
 }
 
-func sine(angle float64, frequency float64, index int) float64 {
-	return math.Sin(angle * frequency * float64(index))
-}
-
-func square(angle float64) float64 {
-	if angle < math.Pi {
+func Square(angle float64, frequency float64) float64 {
+	if Sine(angle, frequency) >= 0 {
 		return 1.0
 	}
 	return -1.0
