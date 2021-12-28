@@ -5,6 +5,7 @@ import (
 	"github.com/jsnctl/gotechre/shared"
 	"github.com/jsnctl/gotechre/waveforms"
 	"math"
+	"math/rand"
 	"os"
 )
 
@@ -23,8 +24,10 @@ var f *os.File
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
+	durations := []float64{0.1, 0.1, 0.1, 0.1, 0.2, 0.05}
 	for _, seed := range generator.Sequence.Stack {
-		note(5.0*seed, 0.04)
+		duration := durations[rand.Intn(len(durations))]
+		note(5.0*seed, duration)
 	}
 }
 
@@ -36,7 +39,8 @@ func note(seed float64, duration float64) {
 
 	for i := 0; i <= nSamples; i++ {
 		angle := angleIncr * float64(i)
-		sample := 5.0 * waveforms.Square(angle, seed)
+		waveFn := waveforms.GetRandomWaveFn()
+		sample := 5.0 * waveFn(angle, seed)
 		var buf [8]byte
 		binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(sample)))
 		write(buf)

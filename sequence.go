@@ -19,10 +19,16 @@ func createSequence(numberOfSteps int) Sequence {
 	}
 
 	muValues := []float64{5, 10, 15}
+	longMuValues := []float64{1.05, 1.55, 1.95}
 
 	sequence.Stack = make([]float64, numberOfSteps)
 	for i, _ := range sequence.Stack {
-		sequence.Stack[i] = normal(muValues[rand.Intn(len(muValues))], 0.02)
+		if i % 8 == 0 {
+			longMu := longMuValues[rand.Intn(len(longMuValues))]
+			sequence.Stack[i] = longMu * normal(muValues[rand.Intn(len(muValues))], 0.02)
+		} else {
+			sequence.Stack[i] = normal(muValues[rand.Intn(len(muValues))], 0.02)
+		}
 	}
 	return sequence
 }
