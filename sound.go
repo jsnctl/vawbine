@@ -37,10 +37,11 @@ func note(seed float64, duration float64) {
 
 	var angleIncr = tau / float64(nSamples)
 
+	waveFn := waveforms.GetRandomWaveFn()
+
 	for i := 0; i <= nSamples; i++ {
 		angle := angleIncr * float64(i)
-		waveFn := waveforms.GetRandomWaveFn()
-		sample := 5.0 * waveFn(angle, seed)
+		sample := waveFn(angle, seed)
 		var buf [8]byte
 		binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(sample)))
 		write(buf)
