@@ -56,3 +56,14 @@ func TestSquare(t *testing.T) {
 	assert.Equal(t, 1.0, result[45])
 	assert.Equal(t, -1.0, result[67])
 }
+
+func TestThud(t *testing.T) {
+	Init()
+	result := make([]float64, nSamples)
+	for i := 0; i < nSamples; i++ {
+		angle := float64(i) * angleIncrement
+		result[i] = Thud(angle, frequency)
+	}
+
+	assert.Equal(t, 0.0, result[0])
+}
