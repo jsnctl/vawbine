@@ -7,7 +7,7 @@ import (
 
 func GetRandomWaveFn() func(angle float64, frequency float64) float64 {
 	waveFns := []func(angle float64, frequency float64) float64 {
-		//Lipsmack,
+		Lipsmack,
 		Thud,
 		Snare,
 		Additive,
@@ -30,16 +30,20 @@ func Additive(angle float64, frequency float64) float64 {
 	if angle < 0.5 * math.Pi {
 		return Sine(angle, frequency) +
 			0.5 * Sine(angle, frequency/100) +
-			0.3 * Sine(angle, frequency/4)
+			0.3 * SquareWithDecay(angle, frequency/4)
 	}
 	return 3*Square(angle, frequency) * math.Exp(-angle/5) * rand.Float64()
 }
 
 func Square(angle float64, frequency float64) float64 {
 	if Sine(angle, frequency) >= 0 {
-		return 1.0 * math.Exp(-angle/5)
+		return 1.0
 	}
-	return -1.0 * math.Exp(-angle/5)
+	return -1.0
+}
+
+func SquareWithDecay(angle float64, frequency float64) float64 {
+	return Square(angle, frequency) * math.Exp(-angle)
 }
 
 func Thud(angle float64, _ float64) float64 { //untested
