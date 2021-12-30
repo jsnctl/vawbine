@@ -1,4 +1,4 @@
-module github.com/jsnctl/gotechre
+module github.com/jsnctl/vawbine
 
 go 1.17
 

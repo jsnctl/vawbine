@@ -1,7 +1,7 @@
 package waveforms
 
 import (
-	"github.com/jsnctl/gotechre/shared"
+	"github.com/jsnctl/vawbine/shared"
 	"github.com/stretchr/testify/assert"
 	"math"
 	"testing"

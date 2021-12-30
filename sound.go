@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/binary"
-	"github.com/jsnctl/gotechre/shared"
-	"github.com/jsnctl/gotechre/waveforms"
+	"github.com/jsnctl/vawbine/shared"
+	"github.com/jsnctl/vawbine/waveforms"
 	"math"
 	"math/rand"
 	"os"
