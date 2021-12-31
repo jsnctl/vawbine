@@ -23,7 +23,7 @@ func createSequence(numberOfSteps int) Sequence {
 
 	sequence.Stack = make([]float64, numberOfSteps)
 	for i, _ := range sequence.Stack {
-		if i % 8 == 0 {
+		if i%8 == 0 {
 			longMu := longMuValues[rand.Intn(len(longMuValues))]
 			sequence.Stack[i] = longMu * normal(muValues[rand.Intn(len(muValues))], 0.02)
 		} else {
