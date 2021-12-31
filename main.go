@@ -1,6 +1,6 @@
 package main
 
 func main() {
-	generator := newGenerator(createSequence(300))
+	generator := newGenerator(stutter(20))
 	generator.generate()
 }

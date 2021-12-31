@@ -24,20 +24,19 @@ var f *os.File
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.1, 0.1, 0.1, 0.1, 0.2, 0.05}
+	durations := []float64{0.025}
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		note(5.0*seed, duration)
+		waveFn := waveforms.GetRandomWaveFn()
+		note(seed, duration, waveFn)
 	}
 }
 
-func note(seed float64, duration float64) {
+func note(seed float64, duration float64, waveFn func(float64, float64) float64) {
 	nSamples := int(duration * shared.SampleRate)
 	tau := math.Pi * 2
 
 	var angleIncr = tau / float64(nSamples)
-
-	waveFn := waveforms.GetRandomWaveFn()
 
 	for i := 0; i <= nSamples; i++ {
 		angle := angleIncr * float64(i)

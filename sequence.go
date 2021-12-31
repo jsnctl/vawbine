@@ -32,3 +32,18 @@ func createSequence(numberOfSteps int) Sequence {
 	}
 	return sequence
 }
+
+func stutter(length int) Sequence {
+	sequence := Sequence{
+		numberOfSteps: length,
+	}
+
+	root := 130.0
+	sequence.Stack = make([]float64, length)
+
+	for i, _ := range sequence.Stack {
+		sequence.Stack[i] = root
+	}
+
+	return sequence
+}
