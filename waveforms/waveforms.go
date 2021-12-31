@@ -21,7 +21,7 @@ func Sine(angle float64, frequency float64) float64 {
 
 func SineWithDecay(angle float64, frequency float64) float64 {
 	if angle < math.Pi {
-		return 3*Sine(angle, 0.5*frequency) - (0.3 * Additive(angle, 3*frequency))
+		return 3*Sine(angle, 0.25*frequency)
 	}
 	return 3 * Sine(angle, frequency) * math.Exp(-angle/5)
 }
