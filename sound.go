@@ -27,10 +27,10 @@ func (generator *Generator) generate() {
 	durations := []float64{0.1, 0.2}
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output := note(seed, duration, waveforms.SineWithDecay, 0)
-		polyphony(output, note(seed, duration-0.05, waveforms.Additive, math.Pi/4))
-		polyphony(output, note(seed, duration+0.01, waveforms.SquareWithDecay, math.Pi/8))
-		polyphony(output, note(seed, 0.05, waveforms.Thud, 0))
+		output := note(seed, duration, waveforms.SquareWithDecay, 0, 1)
+		polyphony(output, note(seed, duration-0.05, waveforms.SquareWithDecay, math.Pi/4, 0.8))
+		polyphony(output, note(seed+20, duration+0.3, waveforms.SquareWithDecay, math.Pi/8, 0.6))
+		polyphony(output, note(seed, 0.05, waveforms.Thud, 0, 1))
 	}
 }
 
@@ -48,7 +48,7 @@ func min(left int, right int) int {
 	return left
 }
 
-func note(seed float64, duration float64, waveFn func(float64, float64) float64, shift float64) [][]byte {
+func note(seed float64, duration float64, waveFn func(float64, float64) float64, shift float64, amplitude float64) [][]byte {
 	nSamples := int(duration * shared.SampleRate)
 	tau := math.Pi * 2
 
@@ -62,7 +62,7 @@ func note(seed float64, duration float64, waveFn func(float64, float64) float64,
 	var note [][]byte
 	for i := 0; i <= nSamples; i++ {
 		angle := (angleIncr + shiftIncr) * float64(i)
-		sample := waveFn(angle, seed)
+		sample := amplitude * waveFn(angle, seed)
 		var buf = make([]byte, 8)
 		binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(sample)))
 		note = append(note, buf)
