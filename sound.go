@@ -24,14 +24,19 @@ var f *os.File
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.1, 0.2}
+	durations := []float64{0.3}
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output := note(seed, duration, waveforms.SquareWithDecay, 0, 1)
-		polyphony(output, note(seed, duration-0.05, waveforms.SquareWithDecay, math.Pi/4, 0.8))
-		polyphony(output, note(seed+20, duration+0.3, waveforms.SquareWithDecay, math.Pi/8, 0.6))
+		output := note(seed, duration, waveforms.SquareWithDecay, 0, 0.5)
+		polyphony(output, note(seed/2.5, duration-0.05, waveforms.SquareWithDecay, math.Pi/4, 0.8))
+		polyphony(output, note(seed/2.5, duration-0.05, waveforms.Additive, math.Pi/2, 0.5))
+		polyphony(output, note(seed+23, duration+0.3, waveforms.SquareWithDecay, math.Pi/8, 0.9))
 		polyphony(output, note(seed, 0.05, waveforms.Thud, 0, 1))
 	}
+}
+
+func monophonic(note [][]byte) {
+	write(note)
 }
 
 func polyphony(left [][]byte, right [][]byte) {

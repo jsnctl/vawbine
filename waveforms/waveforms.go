@@ -43,7 +43,7 @@ func Square(angle float64, frequency float64) float64 {
 }
 
 func SquareWithDecay(angle float64, frequency float64) float64 {
-	return Square(angle, frequency) * math.Exp(-angle)
+	return Square(angle, frequency) * math.Exp(-angle/3)
 }
 
 func Thud(angle float64, _ float64) float64 { //untested
