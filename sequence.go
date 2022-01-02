@@ -18,7 +18,7 @@ func createSequence(numberOfSteps int) Sequence {
 		numberOfSteps: numberOfSteps,
 	}
 
-	muValues := []float64{5, 10, 15}
+	muValues := []float64{50, 100, 150}
 	longMuValues := []float64{1.05, 1.55, 1.95}
 
 	sequence.Stack = make([]float64, numberOfSteps)
@@ -38,7 +38,7 @@ func stutter(length int) Sequence {
 		numberOfSteps: length,
 	}
 
-	root := 130.0
+	root := 10.0
 	sequence.Stack = make([]float64, length)
 
 	for i, _ := range sequence.Stack {
