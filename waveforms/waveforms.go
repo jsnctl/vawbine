@@ -18,17 +18,11 @@ func Sine(angle float64, frequency float64) float64 {
 }
 
 func SineWithDecay(angle float64, frequency float64) float64 {
-	if angle < math.Pi {
-		return 3*Sine(angle, 0.25*frequency) + (2*Sine(angle, frequency/100))
-	}
-	return 3 * Sine(angle, frequency) * math.Exp(-angle/10)
+	return Sine(angle, frequency) * math.Exp(-angle/5)
 }
 
 func Torricelli(angle float64, frequency float64) float64 {
-	if angle < math.Pi/2 {
-		return 2*Sine(angle, 0.25*frequency) + (2*Square(angle, frequency/100))
-	}
-	return 1 * Sine(angle, frequency) * math.Exp(-angle/10) + (0.3*Thud(angle, frequency))
+	return 2*Sine(angle, frequency/4) - 0.8*SquareWithDecay(angle, frequency*frequency)
 }
 
 func Additive(angle float64, frequency float64) float64 {

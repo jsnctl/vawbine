@@ -31,13 +31,14 @@ type Buffer struct {
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.5}
+	durations := []float64{0.2, 0.05, 0.04}
 
 	buffer := Buffer{}
 
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output := createNote(seed, duration, waveforms.Thud, 0, 1)
+		output := createNote(seed, duration, waveforms.Torricelli, 0, 1)
+		output = distortion(output)
 		buffer.values = append(buffer.values, output)
 	}
 
@@ -100,4 +101,19 @@ func reverb(note Note, delay int, decay float64) Note {
 		note.wave[i] = note.wave[i] * (decay*ghost[i-(delay-1)])
 	}
 	return note
+}
+
+func distortion(note Note) Note {
+	// udo zolzer
+	// https://dsp.stackexchange.com/questions/13142/digital-distortion-effect-algorithm
+	for i, _ := range note.wave {
+		preValue := note.wave[i]
+		if preValue > 0 {
+			note.wave[i] = 1 - math.Exp(-preValue)
+		} else {
+			note.wave[i] = -1 + math.Exp(preValue)
+		}
+	}
+	return note
+
 }
