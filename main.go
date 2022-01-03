@@ -1,6 +1,6 @@
 package main
 
 func main() {
-	generator := newGenerator(createSequence(50))
+	generator := newGenerator(ramp(120, 50, 5))
 	generator.generate()
 }

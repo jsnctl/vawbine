@@ -38,12 +38,24 @@ func stutter(length int) Sequence {
 		numberOfSteps: length,
 	}
 
-	root := 10.0
+	root := 100.0
 	sequence.Stack = make([]float64, length)
 
 	for i, _ := range sequence.Stack {
 		sequence.Stack[i] = root
 	}
 
+	return sequence
+}
+
+func ramp(length int, start float64, step float64) Sequence {
+	sequence := Sequence{
+		numberOfSteps: length,
+	}
+	sequence.Stack = make([]float64, length)
+	for i, _ := range sequence.Stack {
+		sequence.Stack[i] = start
+		start = start + step
+	}
 	return sequence
 }

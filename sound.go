@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"github.com/jsnctl/vawbine/shared"
 	"github.com/jsnctl/vawbine/waveforms"
 	"math"
@@ -22,19 +21,23 @@ func newGenerator(sequence Sequence) Generator {
 
 var f *os.File
 
+type Note struct {
+	wave []float64
+}
+
 type Buffer struct {
-	values [][]float64
+	values []Note
 }
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.4, 0.3, 0.1}
+	durations := []float64{0.5}
 
 	buffer := Buffer{}
 
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output := note(seed, duration, waveforms.SineWithDecay, 0, 1)
+		output := createNote(seed, duration, waveforms.Thud, 0, 1)
 		buffer.values = append(buffer.values, output)
 	}
 
@@ -53,21 +56,6 @@ func combineNotes(left []float64, right []float64, decay float64) []float64 { //
 	return result
 }
 
-func monophonic(note []float64) {
-	for _, value := range note {
-		var buf = make([]byte, 8)
-		binary.LittleEndian.PutUint32(buf[:], math.Float32bits(float32(value)))
-		f.Write(buf[:])
-	}
-}
-
-func polyphony(left [][]byte, right [][]byte) {
-	for i := 0; i < min(len(left), len(right)); i++ {
-		writeByte(left[i])
-		writeByte(right[i])
-	}
-}
-
 func longer(left []float64, right []float64) []float64 {
 	if len(left) <= len(right) {
 		return right
@@ -82,7 +70,8 @@ func min(left int, right int) int {
 	return left
 }
 
-func note(seed float64, duration float64, waveFn func(float64, float64) float64, shift float64, amplitude float64) []float64 {
+func createNote(seed float64, duration float64, waveFn func(float64, float64) float64, shift float64, amplitude float64) Note {
+	note := Note{}
 	nSamples := int(duration * shared.SampleRate)
 	tau := math.Pi * 2
 
@@ -93,33 +82,22 @@ func note(seed float64, duration float64, waveFn func(float64, float64) float64,
 		shiftIncr = shift / float64(nSamples)
 	}
 
-	var note []float64
 	for i := 0; i <= nSamples; i++ {
 		angle := (angleIncr + shiftIncr) * float64(i)
 		sample := amplitude * waveFn(angle, seed)
-		note = append(note, sample)
+		note.wave = append(note.wave, sample)
 	}
-
-	var ghost []float64
-	ghost = note
-	delays := []int{200}
-	delay := delays[rand.Intn(len(delays))]
-	for i, _ := range note {
-		if i == 0 || i >= len(note) - 1 || i < delay  {
-			continue
-		}
-		note[i] = note[i] * 0.55*ghost[i-(delay-1)]
-	}
-
 	return note
 }
 
-func write(note [][]byte) {
-	for _, buf := range note {
-		f.Write(buf[:])
+func reverb(note Note, delay int, decay float64) Note {
+	var ghost []float64
+	ghost = note.wave
+	for i, _ := range note.wave {
+		if i == 0 || i >= len(note.wave) - 1 || i < delay  {
+			continue
+		}
+		note.wave[i] = note.wave[i] * (decay*ghost[i-(delay-1)])
 	}
-}
-
-func writeByte(b []byte) {
-	f.Write(b[:])
+	return note
 }
