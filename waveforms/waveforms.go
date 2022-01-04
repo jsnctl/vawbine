@@ -7,7 +7,7 @@ import (
 
 func GetRandomWaveFn() func(angle float64, frequency float64) float64 {
 	waveFns := []func(angle float64, frequency float64) float64{
-		TriangleWithDecay,
+		Thud,
 		Snare,
 	}
 	return waveFns[rand.Intn(len(waveFns))]
@@ -47,7 +47,12 @@ func Triangle(angle float64, frequency float64) float64 {
 }
 
 func TriangleWithDecay(angle float64, frequency float64) float64 {
-	return Triangle(angle, frequency) * math.Exp(-angle)
+	return Triangle(angle, frequency) * math.Exp(-angle/10)
+}
+
+func Sawtooth(angle float64, frequency float64) float64 {
+	cotValue := math.Tan(angle * frequency)
+	return (2/math.Pi)*math.Atan(1.0/cotValue)
 }
 
 func Thud(angle float64, _ float64) float64 { //untested

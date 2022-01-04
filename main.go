@@ -1,6 +1,7 @@
 package main
 
 func main() {
-	generator := newGenerator(ramp(400, 40, 0.1))
+	pattern := ramp(5, 21, 7)
+	generator := newGenerator(arp(100, pattern.Stack))
 	generator.generate()
 }

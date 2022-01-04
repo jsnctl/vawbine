@@ -59,3 +59,22 @@ func ramp(length int, start float64, step float64) Sequence {
 	}
 	return sequence
 }
+
+func arp(length int, pattern []float64) Sequence {
+	sequence := Sequence{
+		numberOfSteps: length,
+	}
+	sequence.Stack = make([]float64, length)
+
+	patternCursor := 0
+	for i, _ := range sequence.Stack {
+		sequence.Stack[i] = pattern[patternCursor]
+		if patternCursor < len(pattern) - 1 {
+			patternCursor += 1
+		} else {
+			patternCursor = 0
+		}
+	}
+
+	return sequence
+}

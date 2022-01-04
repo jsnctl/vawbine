@@ -31,15 +31,16 @@ type Buffer struct {
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.05, 0.07}
+	durations := []float64{0.08, 0.078, 0.076}
 
 	buffer := Buffer{}
-	rampGate := ramp(len(generator.Sequence.Stack), 50, 1)
 
-	for i, seed := range generator.Sequence.Stack {
+	var output Note
+
+	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output := createNote(seed, duration, waveforms.GetRandomWaveFn(), 0, 1)
-		output = reverb(output, int(rampGate.Stack[i]), 0.9)
+		output = createNote(seed, duration, waveforms.Lipsmack, 0, 1)
+		output = reverb(output, 50, 0.9)
 		buffer.values = append(buffer.values, output)
 	}
 
