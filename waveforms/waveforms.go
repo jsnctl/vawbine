@@ -7,7 +7,8 @@ import (
 
 func GetRandomWaveFn() func(angle float64, frequency float64) float64 {
 	waveFns := []func(angle float64, frequency float64) float64{
-		Sine, Triangle, Square,
+		TriangleWithDecay,
+		Snare,
 	}
 	return waveFns[rand.Intn(len(waveFns))]
 }
@@ -46,7 +47,7 @@ func Triangle(angle float64, frequency float64) float64 {
 }
 
 func TriangleWithDecay(angle float64, frequency float64) float64 {
-	return Triangle(angle, frequency) * math.Exp(-angle/3)
+	return Triangle(angle, frequency) * math.Exp(-angle)
 }
 
 func Thud(angle float64, _ float64) float64 { //untested
@@ -57,7 +58,7 @@ func Thud(angle float64, _ float64) float64 { //untested
 
 func Snare(angle float64, frequency float64) float64 { //untested
 	sweepFrequency := 10 * frequency * math.Exp(-angle*3)
-	return 10 * Sine(angle, sweepFrequency) * float64(rand.Intn(10)) * math.Exp(-angle/10)
+	return 0.5*Sine(angle, sweepFrequency) * float64(rand.Intn(10)) * math.Exp(-angle/10)
 }
 
 func Lipsmack(angle float64, frequency float64) float64 { //untested
