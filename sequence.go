@@ -38,7 +38,7 @@ func stutter(length int) Sequence {
 		numberOfSteps: length,
 	}
 
-	root := 100.0
+	root := 50.0
 	sequence.Stack = make([]float64, length)
 
 	for i, _ := range sequence.Stack {

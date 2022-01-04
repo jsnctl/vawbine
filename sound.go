@@ -31,14 +31,13 @@ type Buffer struct {
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.2, 0.05, 0.04}
+	durations := []float64{0.1, 0.11, 0.09, 0.05}
 
 	buffer := Buffer{}
 
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output := createNote(seed, duration, waveforms.Torricelli, 0, 1)
-		output = distortion(output)
+		output := createNote(seed, duration, waveforms.TriangleWithDecay, 0, 1)
 		buffer.values = append(buffer.values, output)
 	}
 

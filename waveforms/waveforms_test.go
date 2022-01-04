@@ -67,3 +67,14 @@ func TestThud(t *testing.T) {
 
 	assert.Equal(t, 0.0, result[0])
 }
+
+func TestTriangle(t *testing.T) {
+	Init()
+	result := make([]float64, nSamples)
+	for i := 0; i < nSamples; i++ {
+		angle := float64(i) * angleIncrement
+		result[i] = Triangle(angle, frequency)
+	}
+
+	assert.Equal(t, 1, 1)
+}
