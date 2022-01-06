@@ -31,7 +31,7 @@ type Buffer struct {
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.08, 0.078, 0.076}
+	durations := []float64{0.4}
 
 	buffer := Buffer{}
 
@@ -39,8 +39,8 @@ func (generator *Generator) generate() {
 
 	for _, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output = createNote(seed, duration, waveforms.Lipsmack, 0, 1)
-		output = reverb(output, 50, 0.9)
+		output = createNote(seed, duration, waveforms.SquareWithDecay, 0, 0.4)
+		reverb(&output, 2500, 0.6)
 		buffer.values = append(buffer.values, output)
 	}
 
@@ -93,7 +93,7 @@ func createNote(seed float64, duration float64, waveFn func(float64, float64) fl
 	return note
 }
 
-func reverb(note Note, delay int, decay float64) Note {
+func reverb(note *Note, delay int, decay float64) *Note {
 	var ghost []float64
 	ghost = note.wave
 	for i, _ := range note.wave {
@@ -103,6 +103,13 @@ func reverb(note Note, delay int, decay float64) Note {
 		note.wave[i] = note.wave[i] * (decay*ghost[i-(delay-1)])
 	}
 	return note
+}
+
+func decay(note *Note, rate float64) *Note{
+	for i, _ := range note.wave {
+		 note.wave[i] = note.wave[i] * math.Exp(-float64(i)/(rate*1000))
+	 }
+	 return note
 }
 
 func distortion(note Note) Note {

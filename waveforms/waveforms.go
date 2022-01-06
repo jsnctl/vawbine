@@ -56,7 +56,7 @@ func Sawtooth(angle float64, frequency float64) float64 {
 }
 
 func Thud(angle float64, _ float64) float64 { //untested
-	frequency := 100 * math.Exp(-angle)
+	frequency := 100 * math.Exp(-angle*5)
 	multipliers := []float64{5, 15}
 	return multipliers[rand.Intn(len(multipliers))] * Sine(angle, frequency)
 }

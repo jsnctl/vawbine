@@ -33,16 +33,14 @@ func createSequence(numberOfSteps int) Sequence {
 	return sequence
 }
 
-func stutter(length int) Sequence {
+func stutter(length int, value float64, blur float64) Sequence {
 	sequence := Sequence{
 		numberOfSteps: length,
 	}
-
-	root := 50.0
 	sequence.Stack = make([]float64, length)
 
 	for i, _ := range sequence.Stack {
-		sequence.Stack[i] = root
+		sequence.Stack[i] = value + (rand.Float64() * blur)
 	}
 
 	return sequence
