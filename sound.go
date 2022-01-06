@@ -31,16 +31,21 @@ type Buffer struct {
 
 func (generator *Generator) generate() {
 	f, _ = os.Create(shared.OutputFile)
-	durations := []float64{0.4}
+	durations := []float64{0.1, 0.05, 0.2}
+	//delays := arp(len(generator.Sequence.Stack), []float64{900, 999}).Stack
 
 	buffer := Buffer{}
 
 	var output Note
+	rand.Seed(120.0)
 
-	for _, seed := range generator.Sequence.Stack {
+	for i, seed := range generator.Sequence.Stack {
 		duration := durations[rand.Intn(len(durations))]
-		output = createNote(seed, duration, waveforms.SquareWithDecay, 0, 0.4)
-		reverb(&output, 2500, 0.6)
+		if i % 4 == 0 {
+			output = createNote(seed*2, duration, waveforms.Snare, 0, 1)
+		} else {
+			output = createNote(seed/50, duration, waveforms.Thud, 0, 1)
+		}
 		buffer.values = append(buffer.values, output)
 	}
 

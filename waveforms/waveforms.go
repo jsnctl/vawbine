@@ -63,10 +63,14 @@ func Thud(angle float64, _ float64) float64 { //untested
 
 func Snare(angle float64, frequency float64) float64 { //untested
 	sweepFrequency := 10 * frequency * math.Exp(-angle*3)
-	return 0.5*Sine(angle, sweepFrequency) * float64(rand.Intn(10)) * math.Exp(-angle/10)
+	return 0.5*Sine(angle, sweepFrequency) * float64(rand.Intn(10)) * math.Exp(-angle/2)
 }
 
 func Lipsmack(angle float64, frequency float64) float64 { //untested
 	sweepFrequency := 50 * frequency * math.Exp(-angle*5)
 	return 10 * Sine(angle, sweepFrequency) * math.Exp(-angle*10)
+}
+
+func Glass(angle float64, frequency float64) float64 { // untested
+	return SquareWithDecay(angle, frequency/7) - Sawtooth(angle-10, frequency)
 }
